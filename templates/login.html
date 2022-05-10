@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+        {% for message in get_flashed_messages()%}
+            <h3 >{{message}}</h3>
+        {% endfor %}
+
+    <div class="row justify-content-md-center">
+        <div class="col-md-7 col-lg-5">
+            <fieldset class="form container">
+             
+            <form action="/users/login" method="post" class="form">
+                {{form.hidden_tag()}}
+
+                {% for field in form if field.widget.input_type != 'hidden' %}
+                <p>
+                    {{field.label (class_="form-lable")}}
+                    {{field (class_="form-control")}}
+                    {% for error in field.errors %}
+                    {{error}}
+                    {% endfor %}
+                </p>
+                {% endfor %}
+                <button class="btn btn-primary">Log In</button>
+            </form>
+            </fieldset>
+        </div>
+    </div>
+{% endblock %}

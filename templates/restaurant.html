@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="grid" id="container">
+    <div class="row">
+        <div class="col text-center"> 
+            <div class="container" id="weather">
+                <h4>{{name}}</4> Forecast <br>
+                <b> {{cond}} <img src="{{icon}}" alt=""> {{temp}} <span>&#8457;</span> </b>
+                
+            </div>
+
+            <div class="container" id="weather">
+                <h3>Favorite_List</h3>
+                <table class="table">
+                    <tr>
+                        <th>Name</th>
+                        <th>City</th>
+                        <th>State</th>
+                    </tr>
+                    {% for fav in fav_list %}
+                    <tr class="w-25">
+                        <td><a href="/users/restaurant/{{fav['restaurant_id']}}">{{fav.name}}</a></td>
+                        <td>{{fav.city}}</td>
+                        <td>{{fav.state}}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        </div>
+        
+        <div class="col-7">
+            <h1> <b>{{result['name']}}</b> </h1>
+            <h5> <b>Cuisine Category:</b> {{result['categories'][0]['title']}} | {{result['categories'][0]['alias']}} </h5>
+            <h5> <b>Rating:</b> {{result['rating']}} <i>&#9734;</i> </h5>
+            <h5> <b>review_count:</b> {{result['review_count']}} </h5>
+            <h5> <b>Address:</b> {{', '.join(result['location']['display_address'])}} </h5>
+            <h5> <b>Phone Number:</b> {{result['display_phone']}} </h5>
+            <h5> <b>Hours:</b> {{result['hours'][0]['open'][0]['start']}} : <time>{{result['hours'][0]['open'][0]['end']}}</time> </h5>
+            <h5> <b>Open Now:</b> {{result['hours'][0]['is_open_now']}}</h5>
+            
+            <a href="/users/restaurant/add/{{result['id']}}" class="btn btn-outline-primary btn-sm"><b>Add to Favorite List</b></a>
+            <br>
+
+            <h1>Photos</h1>
+            <ul>
+                {% for photo in result['photos'] %}
+                    <img src="{{photo}}" alt="" height="130px" width="150px" style="margin: 5px;">
+
+                {% endfor %}
+                
+            </ul>
+            <a href="{{result['url']}}" target="_blank">View Restaurant on Yelp</a>
+
+        </div>
+            
+        <div class="col">
+            <form action="/users/convert" class="container" method="post"> 
+                {{form.hidden_tag()}}
+
+                <p><b> Currency Converter </b></p> 
+                {% for field in form if field.widget.input_type != 'hidden' %}
+                    {{field.label (class_="form-lable")}}
+                    {{field (class_="form-control")}}
+
+                    {% for error in field.errors %}
+                        <p>{{error}}</p>
+                    {% endfor %}
+
+                {% endfor %}
+                <button class="btn btn-primary">Convert</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+    

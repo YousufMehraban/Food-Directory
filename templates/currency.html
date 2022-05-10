@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block content %}
+
+
+
+    {% for message in get_flashed_messages() %}
+        <h3 class="alert alert-danger">{{message}}</h3>
+    {% endfor %}
+
+
+    <div class="grid" id="container">
+        <div class="row">
+            <div class="col text-center"> 
+                <div class="container" id="weather">
+                    <b>{{name}}</b> Forecast <br>
+                    <b> {{cond}} <img src="{{icon}}" alt=""> {{temp}} <span>&#8457;</span> </b>
+                    
+                </div>
+
+                <div class="container" id="weather">
+                    <h3>Favorite_List</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Name</th>
+                            <th>City</th>
+                            <th>State</th>
+                        </tr>
+                        {% for fav in fav_list %}
+                        <tr class="w-25">
+                            <td><a href="/users/restaurant/{{fav['restaurant_id']}}">{{fav.name}}</a></td>
+                            <td>{{fav.city}}</td>
+                            <td>{{fav.state}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+            </div>
+            
+            <div class="col-7">
+                <ul>
+                {% for data in datas %}
+                
+                <li>
+                    Restaurant Name: <a href="/users/restaurant/{{data['restaurant_id']}}"><b>{{data['restaurant_name']}} </b></a> | 
+                        {% for cuisine in data['cuisines'] %}
+                            <i>{{ cuisine }}</i> |
+                        {% endfor %}
+                        <i>{{data['address']['city']}}</i>
+
+                </li>
+
+                {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="col">
+                <form action="/users/convert" class="container" method="post"> 
+                    {{form.hidden_tag()}}
+
+                    <p><b> Currency Converter </b></p> 
+                    {% for field in form if field.widget.input_type != 'hidden' %}
+                        {{field.label (class_="form-lable")}}
+                        {{field (class_="form-control")}}
+
+                        {% for error in field.errors %}
+                            {{error}}
+                        {% endfor %}
+
+                    {% endfor %}
+                    <button class="btn btn-primary">Convert</button>
+                </form>
+                <br>
+                <br>
+                <h3 class="text-center"> {{a}} {{x}} equals:</h3>
+                <h2 class="text-center"><b>{{conversion}}</b> {{y}}</h2>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+
+
+
+{% block content %}
+
+
+
+    {% for message in get_flashed_messages() %}
+        <h3 class="alert alert-danger">{{message}}</h3>
+    {% endfor %}
+
+
+    <div class="grid" id="container">
+        <div class="row">
+            <div class="col text-center"> 
+                <div class="container" id="weather">
+                    <h4><b>{{name}}</b></h4> Forecast <br>
+                    <b> {{cond}} <img src="{{icon}}" alt=""> {{temp}} <span>&#8457;</span> </b>
+                    
+                </div>
+
+                <div class="container" id="weather">
+                    <h3>Favorite_List</h3>
+                    <table class="table">
+                        <tr>
+                            <th>Name</th>
+                            <th>City</th>
+                            <th>State</th>
+                        </tr>
+                        {% for fav in fav_list %}
+                        <tr class="w-25">
+                            <td><a href="/users/restaurant/{{fav['restaurant_id']}}">{{fav.name}}</a></td>
+                            <td>{{fav.city}}</td>
+                            <td>{{fav.state}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+            </div>
+            
+            
+            <div class="col-7">
+                <hr>
+                {% if g.user %}
+                <b>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Photo&#160;&#160;&#160;&#160;&#160;&#160;  &#160;&#160;&#160;&#160;&#160;&#160;Restaurant_Name &#160;&#160;&#160;&#160;&#160;&#160; Ratings &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; Address &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;</b>
+                <hr>
+                <ul>
+                {% for data in datas %}
+                <li class="gap-3">
+                    <img src="{{data['image_url']}}" alt="" height="60px" width="75px" style="margin: 5px;">
+                    <a href="/users/restaurant/{{data['id']}}"><b>{{data['name']}}</b></a> |
+                        
+                    <b>Rating: {{data['rating']}} &#9734; </b> |
+                    <i class="fas fa-car"></i> <i>{{', '.join(data['location']['display_address'])}}</i>
+                    <br>
+                </li>
+
+                {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            
+            <div class="col">
+                <form action="/users/convert" class="container" method="post"> 
+                    {{form.hidden_tag()}}
+                    
+                    <p><b> Currency Converter </b></p> 
+                    {% if g.user %}
+                    {% for field in form if field.widget.input_type != 'hidden' %}
+                        {{field.label (class_="form-lable")}}
+                        {{field (class_="form-control")}}
+
+                        {% for error in field.errors %}
+                            <p>{{error}}</p>
+                        {% endfor %}
+
+                    {% endfor %}
+                    {% endif %}
+                    <button class="btn btn-primary">Convert</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+{% endblock %}

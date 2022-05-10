@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    {% if not g.user %}    
+        {% for msg in get_flashed_messages() %}
+        <h3 class="alert alert-danger">
+            {{msg}}
+        </h3> 
+        {% endfor %}
+
+    {% else %}
+        <div class="row justify-content-md-center">
+            <div class="col-md-7 col-lg-5">             
+                <h3><ul>
+                    <li>
+                        First_Name: {{user.first_name.title()}} 
+                    </li>
+                    <li>
+                        Last_Name: {{user.last_name.title()}}   
+                    </li>
+                </ul>
+                </h3>
+            </div>
+        </div>
+
+    {% endif %}
+{% endblock %}
