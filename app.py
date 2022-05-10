@@ -5,7 +5,7 @@ from models import db, User, FavList
 from forms import LoginForm, SignupForm, CurrencyForm
 from forex_python.converter import CurrencyRates, CurrencyCodes
 import requests
-from keys import Yelp_API_key, Weather_API_key
+from keys.keys import Yelp_API_key, Weather_API_key
 
 app = Flask(__name__)
 
