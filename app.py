@@ -5,11 +5,13 @@ from models import db, User, FavList
 from forms import LoginForm, SignupForm, CurrencyForm
 from forex_python.converter import CurrencyRates, CurrencyCodes
 import requests
-from keys.keys import Yelp_API_key, Weather_API_key
+from keys.keys import Yelp_API_key, Weather_API_key, AppSecret
+from helper import get_weather, business_search, currency_change, all_businesses_search
+
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = 'nothing'
+app.config['SECRET_KEY'] = AppSecret
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///capstone1'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
@@ -34,7 +36,7 @@ def add_user_to_g():
 
 @app.route('/', methods=['GET', 'POST'])
 def root():
-    """display the root page"""
+    """displays the root page"""
     
     form = CurrencyForm()
     fav_list = FavList.query.filter(FavList.user_id==g.user).all()
@@ -43,6 +45,7 @@ def root():
 
 @app.route('/users/signup', methods=['GET', 'POST'])
 def signup():
+    """displays new user sign up form"""
 
     form = SignupForm()
 
@@ -67,7 +70,8 @@ def signup():
 
 @app.route('/users/login', methods=['GET', 'POST'])
 def login():
-    
+    """displays user login form"""
+
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -101,33 +105,16 @@ def user(user_id):
     return render_template('user.html', user = user)
 
 
-def get_weather(url, params):
-    res = requests.get(url, params)
-    res = res.json()
-    name = res['location']['name']
-    temp = res['current']['temp_f']
-    cond = res['current']['condition']['text']
-    icon = res['current']['condition']['icon']
-    return [name, temp, cond, icon]
-
 @app.route('/users/search')
 def search():
+    """searches all business providing the specified cuisine in a particular city"""
 
     city = request.args['search']
     cuisine = request.args['cuisine']
 
-    url = 'https://api.yelp.com/v3/businesses/search'
-    headers = {'Authorization': Yelp_API_key}
-    params = {'term': 'restaurants', 'location': city, 'categories': cuisine}
+    datas = all_businesses_search(city, cuisine)
 
-    res_raw = requests.get(url, params, headers=headers)
-    res = res_raw.json()
-    datas = res['businesses']
-
-    weather_url = 'http://api.weatherapi.com/v1/current.json'
-    weather_params = {'key': Weather_API_key,'q': city }
-
-    weather_result = get_weather(weather_url, weather_params)
+    weather_result = get_weather(city)
     name, temp, cond, icon = weather_result
 
     form = CurrencyForm()
@@ -139,11 +126,13 @@ def search():
 
 @app.route('/users/restaurant/<id>')
 def show_restaurant(id):
+    """displays all details of a restaurant"""
+
 
     url = f'https://api.yelp.com/v3/businesses/{id}'
     headers = {'Authorization': Yelp_API_key}
-    res_raw = requests.get(url, headers=headers)
-    result = res_raw.json()
+    
+    result = business_search(url, headers)
     
     form = CurrencyForm()
     fav_list = FavList.query.filter(FavList.user_id==session[user_key]).all()
@@ -153,11 +142,9 @@ def show_restaurant(id):
 
 @app.route('/users/convert', methods=['GET', 'POST'])
 def convert():
+    """currency exchange or converter"""
 
     form = CurrencyForm()
-    currencies = ['EUR', 'JPY', 'BGN', 'CZK', 'DKK', 'GBP', 'HUF', 'PLN', 'RON', 'SEK', 
-                    'CHF', 'ISK', 'NOK', 'HRK', 'TRY', 'AUD', 'BRL', 'CAD', 'CNY', 'HKD', 
-                    'IDR', 'INR', 'KRW', 'MXN', 'MYR', 'NZD', 'PHP', 'SGD', 'THB', 'ZAR', 'USD']
 
     if form.validate_on_submit():
         
@@ -166,16 +153,12 @@ def convert():
         amount = form.amount.data
         fav_list = FavList.query.filter(FavList.user_id==session[user_key]).all()
 
-
-        if from_currency not in currencies or to_currency not in currencies:
-            flash('One of the Currency not Supported!')
-            return redirect('/')
-        else:
-            converter = CurrencyRates()
-            conversion = round(converter.convert(from_currency, to_currency, amount), 2)
+        conversion = currency_change(from_currency, to_currency, amount)
+        
 
         return render_template('currency.html', form = form, conversion=conversion, 
-                                x = from_currency, y = to_currency, a=amount, fav_list=fav_list)
+                                from_currency = from_currency, to_currency = to_currency, 
+                                amount=amount, fav_list=fav_list)
 
     return redirect('/')
 
@@ -183,11 +166,12 @@ def convert():
 
 @app.route("/users/restaurant/add/<id>")
 def add_restaurant_favorite(id):
+    """adding a favorite restaurant to the favorite list and save it into the database"""
 
     url = f'https://api.yelp.com/v3/businesses/{id}'
     headers = {'Authorization': Yelp_API_key}
-    res_raw = requests.get(url, headers=headers)
-    result = res_raw.json()
+
+    result = business_search(url, headers)
     restaurant_name = result['name']
     city = result['location']['city'] 
     state = result['location']['state']
@@ -197,6 +181,8 @@ def add_restaurant_favorite(id):
     db.session.add(fav_restaurant)
     db.session.commit()
     return redirect('/')
+
+
 
 
 
