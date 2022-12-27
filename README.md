@@ -1,4 +1,4 @@
-**Food Directory**  <img width="100" alt="Food-directory" src="https://user-images.githubusercontent.com/84886044/209596281-e45cb61d-5c99-4d30-bb11-ba82612e2f91.jpg">
+****Food Directory****  <img width="100" alt="Food-directory" src="https://user-images.githubusercontent.com/84886044/209596281-e45cb61d-5c99-4d30-bb11-ba82612e2f91.jpg">
 
 Food Directory is an application that lets users to search their favorite cuisines in a specific city.
 
