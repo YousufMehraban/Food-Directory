@@ -2,7 +2,7 @@ Food Directory  <img width="100" alt="Food-directory" src="https://user-images.g
 
 Food Directory is an application that lets users to search their favorite cuisines in a specific city.
 
-To use the application, first, the users should log in or sign up with their credentials. 
+To use the application, the users should log in or sign up with their credentials. 
 <img width="1000" alt="Food-Directory-1" src="https://user-images.githubusercontent.com/84886044/209596475-2dfc038d-3770-4583-9115-e5804d9ff92c.png">
 
 After successfully logging in or signing up, the application has the below features.
