@@ -22,7 +22,6 @@ When searching a cuisine type in a particular city, the weather forecast feature
 the current weather condition of that particular city by retrieving data from weather API.
 
 **3.Currency Converter Sidebar:**
-<img width="561" alt="Food-Directory-4" src="https://user-images.githubusercontent.com/84886044/209596596-33374f2e-3c93-43bd-aef7-046d3f5097b3.png">
 The currency converter service uses the Forex-Python Converter API. The users can select
 a from-currency and a to-currency abbreviation and an amount. The converter takes the from-currency
 amount and converts it to the to-currency amount.
@@ -33,8 +32,8 @@ list for the future references which functions as a bucket list. The favorite-li
 information in a database and only displays the restaurant name, its city and state to the
 user. By clicking on the restaurant name, full details of the restaurant will be displayed.
 
-<img width="720" alt="Food-Directory-1" src="https://user-images.githubusercontent.com/84886044/209596637-7a3a4ff7-f6bf-4e12-adb8-6ec618719a39.png">
-<img width="720" alt="Food-Directory-2" src="https://user-images.githubusercontent.com/84886044/209596654-11598318-78e8-40ad-b0c4-80644479d9ef.png">
-<img width="720" alt="Food-Directory-3" src="https://user-images.githubusercontent.com/84886044/209596675-c8c263b6-359f-444d-94ec-33400b3732da.png">
-<img width="720" alt="Food-Directory-4" src="https://user-images.githubusercontent.com/84886044/209596689-1f2de713-ffbc-44e2-a922-32d9e910d388.png">
+<img width="1000" alt="Food-Directory-1" src="https://user-images.githubusercontent.com/84886044/209596637-7a3a4ff7-f6bf-4e12-adb8-6ec618719a39.png">
+<img width="1000" alt="Food-Directory-2" src="https://user-images.githubusercontent.com/84886044/209596654-11598318-78e8-40ad-b0c4-80644479d9ef.png">
+<img width="1000" alt="Food-Directory-3" src="https://user-images.githubusercontent.com/84886044/209596675-c8c263b6-359f-444d-94ec-33400b3732da.png">
+<img width="1000" alt="Food-Directory-4" src="https://user-images.githubusercontent.com/84886044/209596689-1f2de713-ffbc-44e2-a922-32d9e910d388.png">
 
